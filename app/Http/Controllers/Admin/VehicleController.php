@@ -27,7 +27,9 @@ class VehicleController extends Controller
     /** Server-side podaci za DataTables. */
     public function data(): JsonResponse
     {
-        $query = Vehicle::with('coverImage')->select('vehicles.*');
+        // orderBy('sort_order') da tabela poštuje redosled iz drag-and-drop-a
+        // (DataTables sa order:[] ne šalje svoj order, pa ovaj ostaje na snazi).
+        $query = Vehicle::with('coverImage')->select('vehicles.*')->orderBy('sort_order');
 
         return DataTables::eloquent($query)
             ->setRowAttr(['data-id' => fn (Vehicle $v) => $v->id])
