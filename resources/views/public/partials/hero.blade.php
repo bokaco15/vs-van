@@ -43,8 +43,4 @@
         </div>
     </div>
 
-    <a href="#flota" class="hero__scroll" data-hero="scroll" aria-label="Skroluj na ponudu">
-        <span>Skroluj</span>
-        <span class="hero__scroll-line"></span>
-    </a>
 </section>

@@ -149,14 +149,12 @@
       .fromTo(".hero__title .line", { opacity: 0, yPercent: 120 }, { opacity: 1, yPercent: 0, duration: 0.95, stagger: 0.1 }, "-=0.2")
       .fromTo('[data-hero="lead"]', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.6 }, "-=0.55")
       .fromTo('[data-hero="actions"]', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.6 }, "-=0.4")
-      .fromTo('[data-hero="stats"]', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.6 }, "-=0.4")
-      .fromTo('[data-hero="scroll"]', { opacity: 0 }, { opacity: 1, duration: 0.6 }, "-=0.3");
+      .fromTo('[data-hero="stats"]', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.6 }, "-=0.4");
 
     /* ---- Parallax pozadine dok se skroluje hero ---- */
     const hero = document.querySelector(".hero");
     if (hero) {
         gsap.to(".hero__bg", { yPercent: 18, ease: "none", scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: true } });
-        gsap.to('[data-hero="scroll"]', { opacity: 0, ease: "none", scrollTrigger: { trigger: hero, start: "top top", end: "20% top", scrub: true } });
     }
 
     /* ---- Scroll-reveal sekcija ---- */
