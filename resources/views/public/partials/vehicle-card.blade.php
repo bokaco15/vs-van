@@ -8,7 +8,7 @@
     $typeLabel = $vehicle->type === 'car' ? 'Automobil' : 'Kombi';
     $phone = $s['contact_phone'] ?? '+381652113423';
 @endphp
-<article class="van-item" data-van="{{ $vehicle->id }}" data-type="{{ $vehicle->type }}">
+<article class="van-item" data-van="{{ $vehicle->id }}" data-type="{{ $vehicle->type }}" data-name="{{ \Illuminate\Support\Str::lower($vehicle->name.' '.$vehicle->subtitle) }}">
     <div class="van-item-photo">
         @if ($vehicle->is_recommended)
             <span class="van-type-tag van-type-tag--reco">★ Preporuka</span>

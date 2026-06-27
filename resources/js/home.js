@@ -78,52 +78,142 @@
         });
     });
 
-    /* -----------------------  Filter vozila  ----------------------- */
-    const filter = document.querySelector(".filter");
-    if (filter) {
-        const buttons = Array.from(filter.querySelectorAll(".filter__btn"));
-        const indicator = filter.querySelector(".filter__indicator");
+    /* ----------------  Flota: filter + pretraga + paginacija  ---------------- */
+    // Sve je client-side: promena kategorije ili pretraga NE osvežava stranicu,
+    // samo se ponovo prikaže odgovarajući set kartica i preračuna paginacija
+    // (po `data-per-page`, podrazumevano 9). Klik na stranicu vraća na sekciju.
+    const fleet = document.querySelector("[data-fleet]");
+    if (fleet) {
+        const grid = fleet.querySelector("[data-fleet-grid]");
+        const cards = grid ? Array.from(grid.querySelectorAll(".van-item")) : [];
+        const filter = fleet.querySelector(".filter");
+        const buttons = filter ? Array.from(filter.querySelectorAll(".filter__btn")) : [];
+        const indicator = filter ? filter.querySelector(".filter__indicator") : null;
         const firstBtn = buttons[0];
-        const cards = Array.from(document.querySelectorAll(".van-item[data-type]"));
-        const empty = document.querySelector(".fleet__empty");
+        const searchInput = fleet.querySelector("[data-fleet-search]");
+        const emptyEl = fleet.querySelector("[data-fleet-empty]");
+        const pager = fleet.querySelector("[data-fleet-pagination]");
+        const perPage = parseInt(fleet.dataset.perPage, 10) || 9;
+
+        let currentType = "all";
+        let currentQuery = "";
+        let currentPage = 1;
+
+        const activeBtn = () => buttons.find((b) => b.classList.contains("is-active")) || firstBtn;
 
         const moveIndicator = (btn) => {
-            if (!indicator || !firstBtn) return;
+            if (!indicator || !firstBtn || !btn) return;
             indicator.style.width = btn.offsetWidth + "px";
             indicator.style.transform = "translateX(" + (btn.offsetLeft - firstBtn.offsetLeft) + "px)";
         };
 
-        const applyFilter = (type) => {
-            const visible = [];
-            cards.forEach((card) => {
-                const match = type === "all" || card.dataset.type === type;
-                card.classList.toggle("is-hidden", !match);
-                if (match) visible.push(card);
+        // Kartice koje zadovoljavaju i tip i pretragu
+        const getMatches = () => cards.filter((c) => {
+            const typeOk = currentType === "all" || c.dataset.type === currentType;
+            const nameOk = !currentQuery || (c.dataset.name || "").indexOf(currentQuery) !== -1;
+            return typeOk && nameOk;
+        });
+
+        // Dinamička paginacija (sa skraćivanjem: 1 … 4 5 6 … 12)
+        const buildPager = (totalPages) => {
+            if (!pager) return;
+            pager.innerHTML = "";
+            if (totalPages <= 1) return;
+
+            const addBtn = (label, page, opts) => {
+                opts = opts || {};
+                const passive = opts.disabled || opts.active || opts.dots;
+                const el = document.createElement(passive ? "span" : "button");
+                el.className = "pg-btn"
+                    + (opts.disabled ? " pg-btn--disabled" : "")
+                    + (opts.active ? " pg-btn--active" : "")
+                    + (opts.dots ? " pg-btn--dots" : "");
+                el.innerHTML = label;
+                if (!passive) {
+                    el.type = "button";
+                    el.addEventListener("click", () => goTo(page));
+                }
+                pager.appendChild(el);
+            };
+
+            addBtn("&#8592;", currentPage - 1, { disabled: currentPage === 1 });
+
+            const seq = [];
+            for (let p = 1; p <= totalPages; p++) {
+                if (p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1) seq.push(p);
+                else if (seq[seq.length - 1] !== "…") seq.push("…");
+            }
+            seq.forEach((p) => {
+                if (p === "…") addBtn("…", null, { dots: true });
+                else addBtn(String(p), p, { active: p === currentPage });
             });
-            if (empty) empty.classList.toggle("is-visible", visible.length === 0);
-            if (useGsap && visible.length) {
-                gsap.fromTo(visible, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.06, ease: "power3.out", overwrite: true });
+
+            addBtn("&#8594;", currentPage + 1, { disabled: currentPage === totalPages });
+        };
+
+        const render = (animate) => {
+            const matches = getMatches();
+            const totalPages = Math.max(1, Math.ceil(matches.length / perPage));
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const start = (currentPage - 1) * perPage;
+            const pageItems = matches.slice(start, start + perPage);
+            const pageSet = new Set(pageItems);
+
+            cards.forEach((c) => c.classList.toggle("is-hidden", !pageSet.has(c)));
+            if (emptyEl) emptyEl.classList.toggle("is-visible", matches.length === 0);
+
+            buildPager(totalPages);
+
+            if (animate && useGsap && pageItems.length) {
+                gsap.fromTo(pageItems, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.06, ease: "power3.out", overwrite: true });
             }
         };
 
+        const goTo = (page) => {
+            currentPage = page;
+            render(true);
+            fleet.scrollIntoView({ behavior: "smooth", block: "start" });
+        };
+
+        // Filter (Sva / Kombiji / Auta) — bez refresha
         buttons.forEach((btn) => {
             btn.addEventListener("click", () => {
+                if (btn.classList.contains("is-active")) return;
                 buttons.forEach((b) => b.classList.remove("is-active"));
                 btn.classList.add("is-active");
                 moveIndicator(btn);
-                applyFilter(btn.dataset.filter);
+                currentType = btn.dataset.filter;
+                currentPage = 1;
+                render(true);
             });
         });
 
-        const active = filter.querySelector(".filter__btn.is-active") || firstBtn;
-        if (active) {
-            requestAnimationFrame(() => moveIndicator(active));
-            window.addEventListener("load", () => moveIndicator(active));
+        // Live pretraga po nazivu (debounce), resetuje na prvu stranicu
+        if (searchInput) {
+            let t = null;
+            searchInput.addEventListener("input", () => {
+                clearTimeout(t);
+                t = setTimeout(() => {
+                    currentQuery = searchInput.value.trim().toLowerCase();
+                    currentPage = 1;
+                    render(true);
+                }, 160);
+            });
         }
-        window.addEventListener("resize", () => {
-            const cur = filter.querySelector(".filter__btn.is-active");
-            if (cur) moveIndicator(cur);
-        });
+
+        // Indikator: snap bez animacije na učitavanju, pa prati aktivno/resize
+        if (indicator && firstBtn) {
+            indicator.style.transition = "none";
+            requestAnimationFrame(() => {
+                moveIndicator(activeBtn());
+                requestAnimationFrame(() => { indicator.style.transition = ""; });
+            });
+        }
+        window.addEventListener("load", () => moveIndicator(activeBtn()));
+        window.addEventListener("resize", () => moveIndicator(activeBtn()));
+
+        render(false); // inicijalni prikaz prve strane (kartice su već vidljive)
     }
 
     /* =====================  GSAP ANIMACIJE  ===================== */
@@ -136,8 +226,9 @@
 
     // Inicijalno sakrij animirane elemente preko GSAP-a (inline) pa skini
     // .gsap-armed klasu — tako nema "blica" pre nego što timeline krene.
+    // Napomena: kartice (.van-item) NE skrivamo preko GSAP-a — njihovu vidljivost
+    // sada kontroliše fleet renderer (paginacija), a animira ih on na promenu.
     gsap.set("[data-hero]", { opacity: 0 });
-    gsap.set(".van-item", { opacity: 0, y: 40 });
     document.body.classList.remove("gsap-armed");
 
     // Suptilan "zoom-out" pozadine na učitavanju (kinematografski ulaz)
@@ -164,12 +255,6 @@
             opacity: 1, y: 0, duration: 0.85, ease: "power3.out", delay,
             scrollTrigger: { trigger: el, start: "top 86%" },
         });
-    });
-
-    /* ---- Kartice vozila — staggered reveal po redovima ---- */
-    ScrollTrigger.batch(".van-item", {
-        start: "top 90%",
-        onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, duration: 0.7, stagger: 0.09, ease: "power3.out", overwrite: true }),
     });
 
     /* ---- Naslovi sekcija: blagi "rise" ---- */

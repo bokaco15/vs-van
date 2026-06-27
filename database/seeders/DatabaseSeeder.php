@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             FeatureSeeder::class,
             VehicleSeeder::class,     // zavisi od FeatureSeeder
+            CarSeeder::class,         // 50 demo automobila (type=car)
             OfferItemSeeder::class,
             FaqSeeder::class,
             SectionSeeder::class,

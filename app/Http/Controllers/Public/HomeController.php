@@ -17,19 +17,21 @@ class HomeController extends Controller
      */
     public function index(Request $request): View
     {
-        // Opcioni filter po tipu (van/car) — priprema za rent-a-car.
-        $type = $request->query('type');
-
+        // Sva aktivna vozila — filter (tip), pretraga i paginacija su client-side
+        // (home.js) tako da promena kategorije/pretrage ne osvežava stranicu.
         $vehicles = Vehicle::active()
-            ->ofType($type)
             ->with(['coverImage', 'images', 'features'])
+            ->orderBy('sort_order')
             ->get();
 
         // Mapa sekcija (key => value) za tekstualni sadržaj.
         $s = Section::query()->pluck('value', 'key');
 
         return view('public.home', [
-            'vehicles' => $vehicles,
+            'vehicles'   => $vehicles,
+            'countAll'   => $vehicles->count(),
+            'countVan'   => $vehicles->where('type', 'van')->count(),
+            'countCar'   => $vehicles->where('type', 'car')->count(),
             'offerItems' => OfferItem::active()->get(),
             'faqs' => Faq::active()->get(),
             's' => $s,

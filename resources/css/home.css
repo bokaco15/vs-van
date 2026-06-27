@@ -297,8 +297,23 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .acc__item.is-open .acc__plus::after { background: #fff; transform: rotate(90deg); }
 
 /* =====================  FLOTA (vozila + filter)  ===================== */
-.fleet { padding: clamp(70px, 10vw, 130px) 0; }
+.fleet { padding: clamp(70px, 10vw, 130px) 0; scroll-margin-top: 90px; }
 .fleet__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; flex-wrap: wrap; margin-bottom: 44px; }
+
+/* Kontrole flote: pretraga + segmentni filter */
+.fleet__controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.fleet__search { position: relative; display: inline-flex; align-items: center; }
+.fleet__search .ico { position: absolute; left: 16px; color: var(--muted-2); pointer-events: none; }
+.fleet__search-input {
+    width: 230px; max-width: 100%; padding: 13px 16px 13px 44px;
+    border-radius: 100px; background: var(--bg-3); border: 1px solid var(--border);
+    color: #fff; font-family: var(--font-body); font-size: 14px; font-weight: 600;
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.fleet__search-input::placeholder { color: var(--muted-2); font-weight: 500; }
+.fleet__search-input:focus { outline: none; border-color: rgba(79, 158, 255, 0.55); box-shadow: 0 0 0 3px rgba(79, 158, 255, 0.16); background: var(--bg-2); }
+.fleet__search:focus-within .ico { color: var(--sel-blue); }
+.fleet__search-input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
 .fleet__title { font-family: var(--font-display); font-weight: 600; font-size: clamp(46px, 7.5vw, 96px); text-transform: uppercase; line-height: 0.88; margin-top: 16px; }
 
 /* Segmentni filter — neon "selector" sa kliznim indikatorom */
@@ -400,6 +415,20 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .kalendar-reserve:hover { transform: translateY(-1px); filter: brightness(1.08); }
 .kalendar-reserve:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; filter: none; transform: none; }
 
+/* =====================  PAGINACIJA FLOTE  ===================== */
+.fleet-pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 52px; flex-wrap: wrap; }
+.pg-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 40px; height: 40px; padding: 0 10px; border-radius: 10px;
+    background: var(--bg-glass); border: 1px solid var(--border);
+    color: var(--muted); font-size: 14px; font-weight: 600; letter-spacing: 0.01em;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+a.pg-btn:hover { background: rgba(79, 158, 255, 0.12); border-color: rgba(79, 158, 255, 0.40); color: #fff; }
+.pg-btn--active { background: var(--sel-blue); border-color: transparent; color: #fff; box-shadow: 0 6px 16px -7px rgba(79, 158, 255, 0.8); cursor: default; }
+.pg-btn--disabled { opacity: 0.28; cursor: not-allowed; }
+.pg-btn--dots { background: transparent; border-color: transparent; cursor: default; color: var(--muted-2); }
+
 /* =====================  FAQ  ===================== */
 .faq-section { padding: clamp(70px, 10vw, 130px) 0; background: var(--bg-2); border-top: 1px solid var(--border-soft); }
 .faq-section__head { max-width: 660px; margin-bottom: 44px; }
@@ -450,6 +479,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     .hero__stats { grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 18px 16px; }
     .hero__stat .label { font-size: 11px; }
 
+    .fleet__controls { width: 100%; }
+    .fleet__search { width: 100%; }
+    .fleet__search-input { width: 100%; }
     .filter { width: 100%; overflow-x: auto; scrollbar-width: none; }
     .filter::-webkit-scrollbar { display: none; }
 }

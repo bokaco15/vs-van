@@ -1,11 +1,12 @@
-{{-- Flota — naslov, segmentni filter (Sva / Kombiji / Auta) i grid kartica.
-     Filtriranje je client-side (home.js) preko data-type na kartici. --}}
-@php
-    $countAll = $vehicles->count();
-    $countVan = $vehicles->where('type', 'van')->count();
-    $countCar = $vehicles->where('type', 'car')->count();
-@endphp
-<section class="fleet" id="flota">
+{{-- Flota — naslov, pretraga, segmentni filter (Sva / Kombiji / Auta) i grid.
+     Filter, pretraga i paginacija (9 po strani) su client-side u home.js —
+     promena kategorije/pretrage NE osvežava stranicu. --}}
+<section class="fleet" id="flota"
+         data-fleet
+         data-per-page="9"
+         data-count-all="{{ $countAll }}"
+         data-count-van="{{ $countVan }}"
+         data-count-car="{{ $countCar }}">
     <div class="container">
         <div class="fleet__head">
             <div class="reveal">
@@ -13,31 +14,46 @@
                 <h2 class="fleet__title">Izaberi svoje<br><span class="amber">vozilo</span></h2>
             </div>
 
-            <div class="filter reveal" data-delay="1" role="tablist" aria-label="Filter vozila">
-                <span class="filter__indicator" aria-hidden="true"></span>
-                <button class="filter__btn is-active" data-filter="all" type="button">
-                    Sva vozila <span class="count">{{ $countAll }}</span>
-                </button>
-                <button class="filter__btn" data-filter="van" type="button">
-                    Kombiji <span class="count">{{ $countVan }}</span>
-                </button>
-                <button class="filter__btn" data-filter="car" type="button">
-                    Auta <span class="count">{{ $countCar }}</span>
-                </button>
+            <div class="fleet__controls reveal" data-delay="1">
+                <div class="fleet__search">
+                    @include('public.partials.icon', ['name' => 'search', 'size' => 18])
+                    <input type="search"
+                           class="fleet__search-input"
+                           data-fleet-search
+                           placeholder="Pretraži po nazivu…"
+                           aria-label="Pretraži vozila po nazivu"
+                           autocomplete="off">
+                </div>
+
+                <div class="filter" role="tablist" aria-label="Filter vozila">
+                    <span class="filter__indicator" aria-hidden="true"></span>
+                    <button class="filter__btn is-active" data-filter="all" type="button">
+                        Sva <span class="count">{{ $countAll }}</span>
+                    </button>
+                    <button class="filter__btn" data-filter="van" type="button">
+                        Kombiji <span class="count">{{ $countVan }}</span>
+                    </button>
+                    <button class="filter__btn" data-filter="car" type="button">
+                        Auta <span class="count">{{ $countCar }}</span>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="fleet__grid">
+        <div class="fleet__grid" data-fleet-grid>
             @foreach ($vehicles as $vehicle)
                 @include('public.partials.vehicle-card', ['vehicle' => $vehicle])
             @endforeach
-
-            {{-- Prazno stanje (npr. kad se izabere kategorija bez vozila) --}}
-            <div class="fleet__empty">
-                <h3>Uskoro</h3>
-                <p>Trenutno nemamo vozila u ovoj kategoriji. Rent-a-car ponuda stiže — javi nam se za detalje.</p>
-            </div>
         </div>
+
+        {{-- Prazno stanje (kad nema rezultata za izabran filter/pretragu) --}}
+        <div class="fleet__empty" data-fleet-empty>
+            <h3>Nema rezultata</h3>
+            <p>Ne nalazimo vozilo za izabrane kriterijume. Probaj drugu kategoriju ili pretragu.</p>
+        </div>
+
+        {{-- Paginaciju popunjava home.js (po 9 vozila) --}}
+        <nav class="fleet-pagination" data-fleet-pagination aria-label="Stranice flote"></nav>
     </div>
 </section>
 
