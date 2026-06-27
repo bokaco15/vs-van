@@ -138,8 +138,8 @@ function updateFooter() {
         reserveBtn.disabled = false
         reserveBtn.textContent = "Rezerviši ovaj dan"
     } else {
-        let n = nightsBetween(rangeStart, rangeEnd)
-        infoEl.innerHTML = `<strong>${fmtTs(rangeStart)}</strong> → <strong>${fmtTs(rangeEnd)}</strong> · ${n} ${n === 1 ? "noć" : "noći"}`
+        let n = nightsBetween(rangeStart, rangeEnd) + 1
+        infoEl.innerHTML = `<strong>${fmtTs(rangeStart)}</strong> → <strong>${fmtTs(rangeEnd)}</strong> · ${n} ${n === 1 ? "dan" : "dana"}`
         reserveBtn.disabled = false
         reserveBtn.textContent = "Rezerviši termin"
     }
@@ -215,8 +215,8 @@ if (reserveBtn) {
         if (rangeEnd === null) {
             message = `Pozdrav, želim da rezervišem ${vanName} za datum ${fmtTs(rangeStart)}`
         } else {
-            let n = nightsBetween(rangeStart, rangeEnd)
-            message = `Pozdrav, želim da rezervišem ${vanName} od ${fmtTs(rangeStart)} do ${fmtTs(rangeEnd)} (${n} ${n === 1 ? "noć" : "noći"})`
+            let n = nightsBetween(rangeStart, rangeEnd) + 1
+            message = `Pozdrav, želim da rezervišem ${vanName} od ${fmtTs(rangeStart)} do ${fmtTs(rangeEnd)} (${n} ${n === 1 ? "dan" : "dana"})`
         }
         let whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
         window.open(whatsappUrl, "_blank")

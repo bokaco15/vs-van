@@ -25,6 +25,7 @@
     --cyan: #25C8FF;
     --purple: #8A3FFC;
     --free: #22C55E;        /* slobodan dan u kalendaru (zeleno) */
+    --sel-blue: #4F9EFF;    /* izabran opseg u kalendaru (plavo) */
 
     /* Tekst */
     --ink: #FFFFFF;
@@ -384,12 +385,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .day.booked { background: rgba(255, 46, 95, 0.16); color: #ff6b8a; cursor: not-allowed; text-decoration: line-through; text-decoration-color: rgba(255, 107, 138, 0.6); }
 .emptyCell { background: transparent !important; border: none !important; }
 
-/* Izbor opsega (booking-stil) */
-.day.in-range, .day.preview { background: rgba(255, 46, 151, 0.20); border-color: transparent; color: #fff; }
-.day.selected, .day.sel-start, .day.sel-end { background: var(--sunset); border-color: transparent; color: #fff; box-shadow: 0 6px 16px -7px rgba(255, 46, 151, 0.8); }
-/* zadrži izbor pink i na hover (da ne pozeleni) */
-.day.selected:hover, .day.sel-start:hover, .day.sel-end:hover { background: var(--sunset); color: #fff; border-color: transparent; }
-.day.in-range:hover, .day.preview:hover { background: rgba(255, 46, 151, 0.28); color: #fff; border-color: transparent; }
+/* Izbor opsega (booking-stil) — plava */
+.day.in-range, .day.preview { background: rgba(79, 158, 255, 0.20); border-color: rgba(79, 158, 255, 0.40); color: #fff; }
+.day.selected, .day.sel-start, .day.sel-end { background: var(--sel-blue); border-color: transparent; color: #fff; box-shadow: 0 6px 16px -7px rgba(79, 158, 255, 0.8); }
+/* zadrži izbor plavo i na hover (da ne pozeleni) */
+.day.selected:hover, .day.sel-start:hover, .day.sel-end:hover { background: var(--sel-blue); color: #fff; border-color: transparent; }
+.day.in-range:hover, .day.preview:hover { background: rgba(79, 158, 255, 0.32); color: #fff; border-color: transparent; }
 
 /* Legenda */
 .kalendar-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; font-size: 11px; color: var(--muted-2); }
@@ -397,14 +398,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .lg { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
 .lg-free { background: rgba(34, 197, 94, 0.16); border: 1px solid var(--free); }
 .lg-busy { background: rgba(255, 46, 95, 0.3); }
-.lg-sel { background: var(--sunset); }
+.lg-sel { background: var(--sel-blue); }
 
 /* Footer: izabran termin + dugme Rezerviši */
 .kalendar-footer { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-soft); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .kalendar-info { flex: 1 1 150px; font-size: 12.5px; line-height: 1.35; color: var(--muted); }
 .kalendar-info strong { color: #fff; font-weight: 700; }
 .kalendar-info.is-warn { color: #ff8aa0; }
-.kalendar-reserve { flex: 0 0 auto; padding: 12px 20px; border-radius: 100px; background: var(--sunset); color: #fff; font-weight: 700; font-size: 13px; box-shadow: 0 8px 22px -10px rgba(255, 46, 151, 0.75); transition: transform 0.2s var(--ease), filter 0.2s, opacity 0.2s; }
+.kalendar-reserve { flex: 0 0 auto; padding: 12px 20px; border-radius: 100px; background: var(--sel-blue); color: #fff; font-weight: 700; font-size: 13px; box-shadow: 0 8px 22px -10px rgba(79, 158, 255, 0.75); transition: transform 0.2s var(--ease), filter 0.2s, opacity 0.2s; }
 .kalendar-reserve:hover { transform: translateY(-1px); filter: brightness(1.08); }
 .kalendar-reserve:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; filter: none; transform: none; }
 
