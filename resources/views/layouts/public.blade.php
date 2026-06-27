@@ -13,23 +13,27 @@
     {{-- Font Awesome (koristi se za FAQ strelice itd.) --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    {{-- Google fontovi: Lato (postojeći) + Montserrat i Anton (korišćeni u CSS-u) --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:wght@400;500;600;700&family=Anton&display=swap" rel="stylesheet">
-
-    {{-- jQuery (script.js ga koristi) — običan script, izvršava se pre Vite ES modula --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    {{-- Fontovi (Fontshare): Clash Display (display/naslovi) + Satoshi (telo) --}}
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
 
     {{-- GLightbox (galerija slika vozila) --}}
     <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
 
-    {{-- Postojeći dizajn + skripte (kroz Vite) --}}
-    @vite(['resources/css/style.css', 'resources/js/script.js', 'resources/js/reservation.js'])
+    {{-- GSAP + ScrollTrigger (kinematografske scroll animacije, GTA-stil).
+         Učitava se pre Vite ES modula da home.js ima globalni `gsap`. --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    {{-- Redizajnirana početna (home.css/home.js) + kalendar (reservation.js) --}}
+    @vite(['resources/css/home.css', 'resources/js/home.js', 'resources/js/reservation.js'])
 
     @stack('styles')
 </head>
-<body>
+<body class="gsap-armed">
+    {{-- Bez JS-a (ili ako GSAP ne učita) hero elementi moraju biti vidljivi --}}
+    <noscript><style>.gsap-armed [data-hero]{opacity:1 !important}.reveal{opacity:1 !important;transform:none !important}</style></noscript>
+
     {{-- Globalna JS konfiguracija (npr. WhatsApp broj iz sekcija) --}}
     <script>
         window.APP_CONFIG = {

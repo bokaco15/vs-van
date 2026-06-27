@@ -1,23 +1,27 @@
-{{-- Stickers sekcija (statične istaknute kategorije) --}}
-<div class="stickers-section">
-    <div class="container stickers-container">
-        <div class="stickers">
-            <div class="sticker">
-                <div class="sticker-img"><img src="{{ asset('img/sticker-van.png') }}" alt="Putnicki kombi"></div>
-                <p class="p-sticker">Putnicki kombiji</p>
+{{-- Trust / kategorije ponude (kombiji + automobili) — moderne SVG ikonice --}}
+<section class="trust">
+    <div class="container">
+        <div class="trust__grid">
+            <div class="trust__card reveal">
+                <div class="trust__icon">@include('public.partials.icon', ['name' => 'truck', 'size' => 30])</div>
+                <h3>Kombiji</h3>
+                <p>Putnički do 9 sedišta i teretni za selidbe i transport.</p>
             </div>
-            <div class="sticker">
-                <div class="sticker-img"><img src="{{ asset('img/sticker-teretni.png') }}" alt="Teretni kombi"></div>
-                <p class="p-sticker">Teretni kombiji</p>
+            <div class="trust__card reveal" data-delay="1">
+                <div class="trust__icon">@include('public.partials.icon', ['name' => 'car', 'size' => 30])</div>
+                <h3>Automobili</h3>
+                <p>Rent-a-car ponuda — gradska i porodična vozila za svaki put.</p>
             </div>
-            <div class="sticker">
-                <div class="sticker-img"><img src="{{ asset('img/kasko-sticker.png') }}" alt="Kasko osigurani kombiji"></div>
-                <p class="p-sticker">Kasko osigurani</p>
+            <div class="trust__card reveal" data-delay="2">
+                <div class="trust__icon">@include('public.partials.icon', ['name' => 'shield', 'size' => 30])</div>
+                <h3>Kasko osigurano</h3>
+                <p>Sva vozila pod punim osiguranjem — voziš bez briga.</p>
             </div>
-            <div class="sticker">
-                <div class="sticker-img"><img src="{{ asset('img/sticker-newgeneration.png') }}" alt="Vozila nove generacije"></div>
-                <p class="p-sticker">Vozila nove generacije</p>
+            <div class="trust__card reveal" data-delay="3">
+                <div class="trust__icon">@include('public.partials.icon', ['name' => 'clock', 'size' => 30])</div>
+                <h3>24/7 podrška</h3>
+                <p>Tu smo na putu kad zatreba — u svako doba, bez čekanja.</p>
             </div>
         </div>
     </div>
-</div>
+</section>

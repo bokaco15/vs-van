@@ -19,10 +19,10 @@ class VehicleSeeder extends Seeder
 
         // Redosled odgovara data-van="van1..4" iz reservations.json (bitno za rezervacije).
         $vehicles = [
-            ['name' => 'Teretni kombi Renault Trafic',  'photo' => 'img/teretni-van.png',  'is_recommended' => true],
-            ['name' => 'Teretni kombi Renault Trafic',  'photo' => 'img/teretni-van.png',  'is_featured' => true],
-            ['name' => 'Putnički kombi Renault Trafic', 'photo' => 'img/putnicki-van.png'],
-            ['name' => 'Putnički kombi Renault Trafic', 'photo' => 'img/putnicki-van.png'],
+            ['name' => 'Teretni kombi Renault Trafic',  'photo' => 'img/photos/cargo.jpg',      'is_recommended' => true],
+            ['name' => 'Teretni kombi Renault Trafic',  'photo' => 'img/photos/cargo.jpg',      'is_featured' => true],
+            ['name' => 'Putnički kombi Renault Trafic', 'photo' => 'img/photos/passenger.jpg'],
+            ['name' => 'Putnički kombi Renault Trafic', 'photo' => 'img/photos/passenger.jpg'],
         ];
 
         foreach ($vehicles as $i => $data) {
